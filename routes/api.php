@@ -10,22 +10,39 @@ Route::group([
 
 ], function ($router) {
 
-    Route::post('login',        'AuthController@login');
-    Route::post('logout',       'AuthController@logout');
-    Route::post('register',     'AuthController@register');
-    Route::get('partir/{id}',   'AuthController@destroy');
-    Route::post('refresh',      'AuthController@refresh');
-    Route::post('user',         'AuthController@user');
+    Route::post('login',            'AuthController@login');
+    Route::post('loginemail',       'AuthController@loginemail');
+    Route::post('logout',           'AuthController@logout');
+    Route::post('register',         'AuthController@register');
+    Route::post('photo',            'AuthController@photo');
+    Route::get('partir/{id}',       'AuthController@destroy');
+    Route::post('refresh',          'AuthController@refresh');
+    Route::post('user',             'AuthController@user');
+    Route::get('notifications',     'NotificationController@notification');
 
 });
+Route::group([
 
-Route::apiResource('produits',              'ProduitController');
-Route::apiResource('origines',              'OrigineController');
+    'middleware' => 'api',
+    'prefix' => 'services'
 
-Route::get('produits/{produit}/origines',   'OrigineController@index');
+], function ($router) {
 
-Route::get('users/produits',                'UserController@index');
-Route::post('user/produits',                'UserController@show');
+    Route::get('servicesfree',      'CarteController@free');
+    Route::get('servicessilver',    'CarteController@silver');
+    Route::get('servicesgold',      'CarteController@gold');
+    Route::get('servicesplatinum',  'CarteController@platinum');
+});
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'assurances'
+
+], function ($router) {
+
+    Route::post('assuranceAuto/save', 'AssuranceController@autosave');
+    Route::post('assuranceMoto/save', 'AssuranceController@Motosave');
+});
 
 
 // Route::middleware('auth:api')->post('/user', function (Request $request) {

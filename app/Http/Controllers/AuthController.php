@@ -16,7 +16,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-         $this->middleware('auth:api', ['except' => ['register', 'login']]);
+         $this->middleware('auth:api', ['except' => ['register', 'login','loginemail']]);
     }
 
     public function register(Request $request)
@@ -31,14 +31,36 @@ class AuthController extends Controller
       $token = auth()->login($user);
       return $this->respondWithToken2($token,$user);
     }
+    public function photo(Request $request )
+    {
+        // $request->user();
+        if ($request->user()) {
+            $id=$request->user()->id;
+            $profil=User::where('id',$id)->first();
+            $profil->photo=$request->photo;
+            $profil->save();
+            return response()->json($profil->photo);
+        }
+        return response()->json(['error' => 'Non autoriser'], 401);
+    }
 
     public function login(Request $request)
     {
-        $user = User::where('telephone', $request->tel)->first();
+        $user = User::where('telephone', $request->telephone)->first();
 
         if ($user==!null) {
-            $token=JWTAuth::fromUser($user);
-            return $this->respondWithToken($token,$user);
+            return $this->respondWithToken($user);
+        }
+
+        return response()->json(['error' => 'Non autoriser'], 401);
+    }
+
+    public function loginemail(Request $request)
+    {
+        $credentials = $request->only(['email', 'password']);
+        if ($token = auth()->attempt($credentials)) {
+            $user = $request->user();
+            return $this->respondWithToken2($token, $user);
         }
 
         return response()->json(['error' => 'Non autoriser'], 401);
@@ -60,14 +82,14 @@ class AuthController extends Controller
         return $this->respondWithToken($this->guard()->refresh());
     }
 
-    protected function respondWithToken($token,$user)
+    protected function respondWithToken($user)
     {
         $otp=$this->generateNumericOTP(6);
 
         try {
             //code...
             Nexmo::message()->send([
-                'to'    => $user->tel ,
+                'to'    => $user->telephone ,
                 'from' => '22671528080' ,
                 'text' => 'Code OTP : '.$otp
             ]);
@@ -75,23 +97,16 @@ class AuthController extends Controller
             throw $th;
         }
 
-        return response()->json([
-            'nom' =>$user->nom,
-            'prenom' =>$user->prenom,
-            'email' =>$user->email,
-            'telephone' => $user->telephone,
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'otp' =>$otp,
-            'expires_in' => $this->guard()->factory()->getTTL() * 60
-        ]);
+        return response()->json(['otp' =>$otp,]);
     }
+
     protected function respondWithToken2($token,$user)
     {
         return response()->json([
             'nom' =>$user->nom,
             'prenom' =>$user->prenom,
             'email' =>$user->email,
+            'photo' => $user->photo,
             'telephone' => $user->telephone,
             'access_token' => $token,
             'token_type' => 'bearer',
@@ -118,10 +133,5 @@ class AuthController extends Controller
         return Auth::guard();
     }
 
-    public function destroy($id)
-    {
-        $user = User::findOrFail($id);
-        $user->delete();
-        return response()->json(['message' => 'Usager bien supprimé'], 204);
-    }
+
 }
