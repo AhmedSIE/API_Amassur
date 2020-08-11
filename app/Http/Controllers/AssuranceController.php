@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Assurance;
 use App\Assurancesauto;
+use App\Assurancesmaison;
 use App\Assurancesmoto;
+use App\Assurancessante;
+use App\Enfant;
 use Illuminate\Http\Request;
 
 class AssuranceController extends Controller
@@ -59,5 +62,74 @@ class AssuranceController extends Controller
         $assuranceMoto->save();
 
         return response()->json('Votre requête est en cours de traitement');
+    }
+    public function maisonsave(Request $request){
+        $assurance= new Assurance();
+        // dd($request->user());
+        $assurance->user_id=$request->user()->id;
+        $assurance->carte_id=1;
+        $assurance->assureur=$request->compagnie;
+        $assurance->type_assurance='Assurance Maison';
+        $assurance->modepayement=$request->modepayement;
+        $assurance->offre=$request->offre;
+        $assurance->ville=$request->ville;
+        $assurance->save();
+
+        $assuranceMaison = new Assurancesmaison();
+        $assuranceMaison->assurance_id=$assurance->id;
+        $assuranceMaison->statut=$request->statut;
+        $assuranceMaison->bienconcerne=$request->bienconcerne;
+        $assuranceMaison->nombrepiece=$request->nombrepiece;
+        $assuranceMaison->stockagemarchandise=$request->stockagemarchandise;
+        $assuranceMaison->bienprecieux=$request->bienprecieux;
+        $assuranceMaison->valeurmobilier=$request->valeurmobilier;
+        $assuranceMaison->valeurelectronique=$request->valeurelectronique;
+        $assuranceMaison->nombrenfant=$request->nombrenfant;
+        $assuranceMaison->nombrehabitant=$request->nombrehabitant;
+        $assuranceMaison->save();
+
+        return response()->json('Votre requête est en cours de traitement');
+    }
+    public function santesave(Request $request){
+        // dd($request->all());
+        $assurance= new Assurance();
+        $assurance->user_id=$request->user()->id;
+        $assurance->carte_id=1;
+        $assurance->assureur=$request->compagnie;
+        $assurance->type_assurance='Assurance Santé';
+        $assurance->modepayement=$request->modepayement;
+        $assurance->offre=$request->offre;
+        $assurance->ville=$request->ville;
+        $assurance->save();
+
+        $assuranceSante = new Assurancessante();
+        $assuranceSante->assurance_id=$assurance->id;
+        $assuranceSante->nom=$request->nom;
+        $assuranceSante->prenoms=$request->prenom;
+        $assuranceSante->date_naissance=$request->age;
+        $assuranceSante->regime_obligatoire=$request->regimeobligatoire;
+        $assuranceSante->email=$request->email;
+        $assuranceSante->telephone=$request->telephone;
+        $assuranceSante->nomconjoint=$request->nomconjoint;
+        $assuranceSante->prenomsconjoint=$request->prenomconjoint;
+        $assuranceSante->conjoint_date_naissance=$request->ageconjoint;
+        $assuranceSante->conjoint_regime_obligatoire=$request->regimeobligatoirefemme;
+        $assuranceSante->nombre_enfants	= count($request->enfants);
+        $assuranceSante->save();
+
+        if ($request->enfants!=null) {
+            foreach ($request->enfants as $enf) {
+                $enfant = new Enfant();
+                $enfant->assurancesante_id=$assuranceSante->id;
+                $enfant->nomenfant=$enf['nom'];
+                $enfant->prenomenfant=$enf['prenom'];
+                $enfant->date_naissance=$enf['age'];
+                $enfant->regime=$enf['regime'];
+                $enfant->save();
+            }
+        }
+
+        return response()->json('Votre requête est en cours de traitement');
+        // return response()->json($assurance->id);
     }
 }

@@ -18,6 +18,7 @@ Route::group([
     Route::get('partir/{id}',       'AuthController@destroy');
     Route::post('refresh',          'AuthController@refresh');
     Route::post('user',             'AuthController@user');
+    Route::post('montoken',         'AuthController@usertoken');
     Route::get('notifications',     'NotificationController@notification');
 
 });
@@ -42,6 +43,8 @@ Route::group([
 
     Route::post('assuranceAuto/save', 'AssuranceController@autosave');
     Route::post('assuranceMoto/save', 'AssuranceController@Motosave');
+    Route::post('assuranceMaison/save','AssuranceController@maisonsave');
+    Route::post('assuranceSante/save','AssuranceController@santesave');
 });
 
 

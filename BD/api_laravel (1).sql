@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jul 28, 2020 at 10:50 AM
+-- Generation Time: Aug 11, 2020 at 05:37 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.3.5
 
@@ -35,10 +35,10 @@ CREATE TABLE IF NOT EXISTS `assurances` (
   `carte_id` bigint(20) UNSIGNED DEFAULT NULL,
   `assureur` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `type_assurance` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `modepayement` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `modepayement` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `offre` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ville` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `age` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `age` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `etape` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `assurancesautos` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `assurancesauto_assurance_id_foreign` (`assurance_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -83,14 +83,14 @@ CREATE TABLE IF NOT EXISTS `assurancesmaisons` (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `assurance_id` bigint(20) UNSIGNED NOT NULL,
   `statut` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `bienconcerne` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nombrepiece` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `stockagemarchandise` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `bienprecieux` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `valeurmobilier` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `valeurelectronique` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nombrenfant` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nombrehabitant` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bienconcerne` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nombrepiece` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stockagemarchandise` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `bienprecieux` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `valeurmobilier` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `valeurelectronique` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nombrenfant` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nombrehabitant` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `assurancesmotos` (
   `modele` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `marque` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `immatriculation` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `photoimmatriculation` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `photoimmatriculation` longtext COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -128,25 +128,33 @@ DROP TABLE IF EXISTS `assurancessantes`;
 CREATE TABLE IF NOT EXISTS `assurancessantes` (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `assurance_id` bigint(20) UNSIGNED NOT NULL,
-  `assureprincipal` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `sex` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nom` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `prenoms` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `date_naissance` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `regime_obligatoire` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `date_debut_contrat` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sex` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nom` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `prenoms` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `date_naissance` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `regime_obligatoire` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `date_debut_contrat` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `code_postal` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `telephone` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `conjoint_sex` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `conjoint_date_naissance` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `conjoint_regime_obligatoire` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nombre_enfants` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `telephone` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nomconjoint` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `prenomsconjoint` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `conjoint_sex` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `conjoint_date_naissance` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `conjoint_regime_obligatoire` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nombre_enfants` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `assurancessante_assurance_id_foreign` (`assurance_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `assurancessantes`
+--
+
+INSERT INTO `assurancessantes` (`id`, `assurance_id`, `sex`, `nom`, `prenoms`, `date_naissance`, `regime_obligatoire`, `date_debut_contrat`, `code_postal`, `email`, `telephone`, `nomconjoint`, `prenomsconjoint`, `conjoint_sex`, `conjoint_date_naissance`, `conjoint_regime_obligatoire`, `nombre_enfants`, `created_at`, `updated_at`) VALUES
+(1, 1, NULL, 'Ggvv', 'Hg', 'Hhhh', 'Régime agricole', NULL, NULL, 'Hggh', '888', NULL, NULL, NULL, NULL, NULL, '2', '2020-08-11 17:35:47', '2020-08-11 17:35:47');
 
 -- --------------------------------------------------------
 
@@ -289,8 +297,11 @@ INSERT INTO `cartes_services` (`id`, `carte_id`, `service_id`, `created_at`, `up
 DROP TABLE IF EXISTS `enfants`;
 CREATE TABLE IF NOT EXISTS `enfants` (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `assurancesante_id` bigint(20) UNSIGNED NOT NULL,
-  `date_naissance` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `assurancesante_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `nomenfant` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `prenomenfant` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `date_naissance` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `regime` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -309,7 +320,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -320,7 +331,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (8, '2020_07_23_101724_create_services_table', 3),
 (7, '2020_07_23_101636_create_cartes_table', 3),
 (9, '2020_07_23_101807_create_cartes_services_table', 3),
-(10, '2020_07_23_101913_create_assurances_table', 3),
+(18, '2020_07_23_101913_create_assurances_table', 4),
 (11, '2020_07_23_102159_create_notifications_table', 3),
 (12, '2020_07_23_102228_create_bonplan_table', 3),
 (13, '2020_07_23_113623_create_assurancesauto_table', 3),

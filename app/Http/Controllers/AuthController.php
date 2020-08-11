@@ -16,7 +16,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-         $this->middleware('auth:api', ['except' => ['register', 'login','loginemail']]);
+         $this->middleware('auth:api', ['except' => ['register', 'login','loginemail','usertoken']]);
     }
 
     public function register(Request $request)
@@ -43,7 +43,14 @@ class AuthController extends Controller
         }
         return response()->json(['error' => 'Non autoriser'], 401);
     }
-
+    public function usertoken(Request $request){
+        $token=$request->user();
+        if ($token!= null) {
+            return response()->json($token);
+        }else{
+            return response()->json('erreur');
+        }
+    }
     public function login(Request $request)
     {
         $user = User::where('telephone', $request->telephone)->first();
