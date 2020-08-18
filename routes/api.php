@@ -46,6 +46,16 @@ Route::group([
     Route::post('assuranceMaison/save','AssuranceController@maisonsave');
     Route::post('assuranceSante/save','AssuranceController@santesave');
 });
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'messages'
+
+], function ($router) {
+
+    Route::post('message/save', 'MessageController@save');
+    Route::post('message',      'MessageController@index');
+});
 
 
 // Route::middleware('auth:api')->post('/user', function (Request $request) {

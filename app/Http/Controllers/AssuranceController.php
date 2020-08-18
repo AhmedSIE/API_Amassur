@@ -107,6 +107,7 @@ class AssuranceController extends Controller
         $assuranceSante->nom=$request->nom;
         $assuranceSante->prenoms=$request->prenom;
         $assuranceSante->date_naissance=$request->age;
+        $assuranceSante->profil=$request->profil;
         $assuranceSante->regime_obligatoire=$request->regimeobligatoire;
         $assuranceSante->email=$request->email;
         $assuranceSante->telephone=$request->telephone;
