@@ -10,20 +10,19 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewMessage
+class MyEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $data;
+    public $message;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($data)
-    {
-        $this->data = $data;
+    public function __construct($message) {
+        $this->message = $message;
     }
 
     /**
@@ -31,11 +30,11 @@ class NewMessage
      *
      * @return \Illuminate\Broadcasting\Channel|array
      */
-    public function broadcastOn()
-    {
-        return ['mi-canal'];
+    public function broadcastOn(){
+        return ['my-channel'];
     }
-    public function broadcastAs() {
-        return 'mi-evento';
+
+    public function broadcastAs(){
+        return 'my-event';
     }
 }

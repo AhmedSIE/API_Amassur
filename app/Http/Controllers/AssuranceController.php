@@ -133,4 +133,5 @@ class AssuranceController extends Controller
         return response()->json('Votre requête est en cours de traitement');
         // return response()->json($assurance->id);
     }
+
 }

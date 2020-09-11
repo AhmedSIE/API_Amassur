@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MyEvent;
 use App\Message;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,8 @@ class MessageController extends Controller
         $message->statut='envoyé';
         $message->texte=$request->message;
         $message->save();
-        $messages=Message::all();
+        $messages=Message::where('user_id',$request->user()->id)->get();
+        event(new MyEvent($message));
         return response()->json($messages);
     }
     public function index(Request $request){

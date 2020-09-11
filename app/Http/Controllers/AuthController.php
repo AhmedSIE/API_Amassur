@@ -27,10 +27,29 @@ class AuthController extends Controller
         'email' => $request->email,
         'telephone' => $request->telephone,
         'password' => bcrypt($request->password),
+        'carte_id' => 1,
       ]);
       $token = auth()->login($user);
       return $this->respondWithToken2($token,$user);
     }
+    public function edit(Request $request)
+    {
+        $user=$request->user();
+        $user->nom=$request->nom;
+        $user->prenom=$request->prenom;
+        $user->email=$request->email;
+        $user->telephone=$request->telephone;
+        if ($request->paswsord!=null) {
+            if($user->password == bcrypt($request->ancienpassword)){
+                $user->password = bcrypt($request->password);
+            }else{
+                return response()->json('Erreur');
+            }
+        }
+        $user->save();
+        return response()->json($user);
+    }
+
     public function photo(Request $request )
     {
         // $request->user();
@@ -115,6 +134,7 @@ class AuthController extends Controller
             'email' =>$user->email,
             'photo' => $user->photo,
             'telephone' => $user->telephone,
+            'carte_id' => $user->carte_id,
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => $this->guard()->factory()->getTTL() * 60

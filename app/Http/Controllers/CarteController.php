@@ -75,4 +75,10 @@ class CarteController extends Controller
             ]
         );
     }
+    public function souscrire(Request $request) {
+        $user=$request->user();
+        $user->carte_id=$request->carte;
+        $user->save();
+        return response()->json($user);
+    }
 }
